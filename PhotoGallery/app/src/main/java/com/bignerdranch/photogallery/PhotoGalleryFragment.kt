@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.inflate
-import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -45,6 +44,31 @@ class PhotoGalleryFragment : Fragment() {
 
        lifecycle.addObserver(thumbnailDownloader.fragmentLifecycleObserver)
 
+        setHasOptionsMenu(true)
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_photo_gallery, menu)
+
+        val searchItem : MenuItem = menu.findItem(R.id.menu_item_search)
+        val searchView  = searchItem.actionView as androidx.appcompat.widget.SearchView
+
+        searchView.apply {
+            setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    Log.d(TAG,"QueryTextSubmit: $query")
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    Log.d(TAG,"QueryTextChanged: $query")
+                    return false
+                }
+
+            })
+        }
     }
 
     override fun onCreateView(
