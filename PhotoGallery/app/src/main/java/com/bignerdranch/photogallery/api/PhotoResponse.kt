@@ -1,5 +1,6 @@
-package com.bignerdranch.photogallery
+package com.bignerdranch.photogallery.api
 
+import com.bignerdranch.photogallery.GalleryItem
 import com.google.gson.annotations.SerializedName
 
 class PhotoResponse {

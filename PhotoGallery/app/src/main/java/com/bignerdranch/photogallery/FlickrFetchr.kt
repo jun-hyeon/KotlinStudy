@@ -7,7 +7,9 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bignerdranch.photogallery.api.FlickrApi
+import com.bignerdranch.photogallery.api.FlickrResponse
 import com.bignerdranch.photogallery.api.PhotoInterceptor
+import com.bignerdranch.photogallery.api.PhotoResponse
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -39,8 +41,8 @@ class FlickrFetchr {
 
     }
 
-    fun fetchPhotos(query : String): LiveData<List<GalleryItem>>{
-        return fetchPhotoMetadata(flickrApi.searchPhotos(query))
+    fun fetchPhotos(): LiveData<List<GalleryItem>>{
+        return fetchPhotoMetadata(flickrApi.fetchPhotos())
     }
 
     fun searchPhotos(query: String) : LiveData<List<GalleryItem>>{
