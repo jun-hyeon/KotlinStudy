@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:backgroundTint="@color/white"
+    android:layout_gravity="center"
+    tools:context=".SignUpActivity">
+
+
+    <EditText
+        android:id="@+id/signUpId"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:hint="ID를 입력해주세요"
+        android:textColorHint="@color/gray"
+        />
+
+    <EditText
+        android:id="@+id/signUpPw"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:hint="PW를 입력해주세요"
+        />
+
+    <EditText
+        android:id="@+id/signUpName"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:hint="이름을 입력해주세요"
+        />
+
+
+<LinearLayout
+    android:gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1">
+
+    <Button
+        android:id="@+id/signUpAccessBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="회원가입"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        />
+</LinearLayout>
+
+
+
+</LinearLayout>

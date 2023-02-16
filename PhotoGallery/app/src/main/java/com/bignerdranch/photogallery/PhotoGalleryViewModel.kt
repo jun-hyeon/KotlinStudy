@@ -18,7 +18,7 @@ class PhotoGalleryViewModel(private val app: Application) : AndroidViewModel(app
     get() = mutableSearchTerm.value ?: ""
 
     init {
-        mutableSearchTerm.value = QueryReferences.QueeryReference.getStoredQuery(app)
+        mutableSearchTerm.value = QueryReferences.QueryReference.getStoredQuery(app)
 
         galleryItemLiveData = Transformations.switchMap(mutableSearchTerm){
             searchTerm -> if(searchTerm.isBlank()){
@@ -30,7 +30,7 @@ class PhotoGalleryViewModel(private val app: Application) : AndroidViewModel(app
     }
 
     fun fetchPhotos(query : String = ""){
-        QueryReferences.QueeryReference.setStoredQuery(app, query)
+        QueryReferences.QueryReference.setStoredQuery(app, query)
         mutableSearchTerm.value = query
     }
 }

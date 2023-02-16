@@ -15,8 +15,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.*
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "PhotoGalleryFragment"
+private const val POLL_WORK = "POLL_WORK"
 
 
 class PhotoGalleryFragment : Fragment() {
@@ -38,6 +41,7 @@ class PhotoGalleryFragment : Fragment() {
        }
 
        lifecycle.addObserver(thumbnailDownloader.fragmentLifecycleObserver)
+
 
         setHasOptionsMenu(true)
 
@@ -68,6 +72,15 @@ class PhotoGalleryFragment : Fragment() {
                 searchView.setQuery(photoGalleryViewModel.searchTerm, false)
             }
         }
+
+        val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
+        val isPolling = QueryReferences.QueryReference.isPolling(requireContext())
+        val toggleItemTitle = if(isPolling){
+            R.string.stop_polling
+        }else{
+            R.string.start_polling
+        }
+        toggleItem.setTitle(toggleItemTitle)
     }
 
 
@@ -78,8 +91,27 @@ class PhotoGalleryFragment : Fragment() {
                 photoGalleryViewModel.fetchPhotos("")
                 true
             }
+            R.id.menu_item_toggle_polling -> {
+                val isPolling = QueryReferences.QueryReference.isPolling(requireContext())
+                if(isPolling){
+                    WorkManager.getInstance(requireContext()).cancelUniqueWork(POLL_WORK)
+                    QueryReferences.QueryReference.setPolling(requireContext(), false)
+                }else{
+                    val constraints = Constraints.Builder()
+                        .build()
+                    val periodRequest = PeriodicWorkRequest
+                        .Builder(PollWorker::class.java, 15, TimeUnit.MINUTES)
+                        .setConstraints(constraints)
+                        .build()
+                    WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(POLL_WORK, ExistingPeriodicWorkPolicy.KEEP,periodRequest)
+                    QueryReferences.QueryReference.setPolling(requireContext(), true)
+                }
+                activity?.invalidateOptionsMenu()
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+
     }
 
     override fun onCreateView(
