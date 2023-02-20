@@ -10,22 +10,58 @@
     android:layout_gravity="center"
     tools:context=".SignUpActivity">
 
-
-    <EditText
-        android:id="@+id/signUpId"
+    <LinearLayout
         android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+<LinearLayout
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="center">
+
+    <EditText
+        android:layout_weight="8"
+        android:id="@+id/signUpId"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:layout_width="0dp"
+        android:background="@null"
         android:textAlignment="center"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:inputType="text"
         android:hint="ID를 입력해주세요"
         android:textColorHint="@color/gray"
         />
+
+    <TextView
+        android:id="@+id/idCheckBtn"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        android:clickable="true"
+        android:text="중복\n확인"
+        android:focusable="true" />
+</LinearLayout>
 
     <EditText
         android:id="@+id/signUpPw"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:inputType="textVisiblePassword"
         android:textAlignment="center"
         android:hint="PW를 입력해주세요"
         />
@@ -35,27 +71,30 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:textSize="20sp"
+        android:inputType=""
+        android:textColor="@color/black"
         android:textAlignment="center"
         android:hint="이름을 입력해주세요"
         />
+    </LinearLayout>
 
-
-<LinearLayout
-    android:gravity="bottom"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1">
-
-    <Button
-        android:id="@+id/signUpAccessBtn"
+    <LinearLayout
+        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="회원가입"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        />
-</LinearLayout>
+        android:layout_weight="1">
 
-
+        <Button
+            android:id="@+id/signUpAccessBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:backgroundTint="@color/gray"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            />
+    </LinearLayout>
 
 </LinearLayout>

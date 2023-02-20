@@ -14,14 +14,18 @@ interface API {
   @Headers("Content-Type: application/json")
   fun postUser(@Body userInfo: JoinMember) : Call<String>
 
-  @GET("posts")
-  fun getInfo()
+  @GET("repetitionCheckId")
+  @Headers("Content-Type: application/json")
+  fun getRepetitionCheckId(@Query("memberId") memberId : String) : Call<String>
+
+  @POST("loginMember")
+  @Headers("Content-Type: application/json")
+  fun loginMember(@Body loginRequest: LoginRequest) : Call<LoginInfo>
 
 
   companion object{
 
     private const val baseUrl = "http://220.121.121.168:8080/"
-
 
     fun create() : API {
       val gson : Gson = GsonBuilder().setLenient().create()
