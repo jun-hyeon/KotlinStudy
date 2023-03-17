@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
    lateinit var loginBtn : Button
    lateinit var loginId : EditText
    lateinit var loginPw : EditText
@@ -23,13 +23,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         loginBtn = findViewById(R.id.loginBtn)
         loginId = findViewById(R.id.loginId)
         loginPw = findViewById(R.id.loginPw)
         siginUpBtn = findViewById(R.id.signUpBtn)
         findPw = findViewById(R.id.pwFindBtn)
+
+        val memberId = App.prefs.getString("memberId","mo memberId")
+
+        Log.d("PREFS",memberId)
 
         siginUpBtn.setOnClickListener {
             val intent = Intent(this,SignUpActivity::class.java)
@@ -53,6 +57,14 @@ class MainActivity : AppCompatActivity() {
 
                         if (loginInfo != null) {
                             Toast.makeText(applicationContext, loginInfo.memberState,Toast.LENGTH_SHORT).show()
+
+                            if (loginInfo.memberState == "로그인 완료") {
+                                App.prefs.setString("memberId",loginInfo.memberId)
+
+
+                                val intent = Intent(applicationContext,FeedActivity::class.java)
+                                startActivity(intent)
+                            }
                         }
                     }
                     override fun onFailure(call: Call<LoginInfo>, t: Throwable) {

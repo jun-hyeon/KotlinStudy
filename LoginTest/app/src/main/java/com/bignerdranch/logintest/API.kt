@@ -2,8 +2,8 @@ package com.bignerdranch.logintest
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -22,10 +22,21 @@ interface API {
   @Headers("Content-Type: application/json")
   fun loginMember(@Body loginRequest: LoginRequest) : Call<LoginInfo>
 
+  @GET("FeedInquiry")
+  @Headers("Content-Type: application/json")
+  fun getFeed() : Call<List<FeedQueryItem>>
+
+
+  @Multipart
+  @POST("insertFeed")
+  fun writeFeed(
+    @Part("data") writeFeedData: FeedQueryItem,
+    @Part  uploadImage : List<MultipartBody.Part>
+  ) :Call<String>
 
   companion object{
 
-    private const val baseUrl = "http://220.121.121.168:8080/"
+    private const val baseUrl = "http://172.30.1.36:8080/"
 
     fun create() : API {
       val gson : Gson = GsonBuilder().setLenient().create()
@@ -35,7 +46,6 @@ interface API {
         .baseUrl(baseUrl)
         .build()
         .create(API::class.java)
-
     }
   }
 }

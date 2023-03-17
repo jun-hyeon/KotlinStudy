@@ -39,7 +39,6 @@ class SignUpActivity : AppCompatActivity() {
             api.getRepetitionCheckId(signUpId.text.toString()).enqueue(object : Callback<String>{
 
                 override fun onResponse(call: Call<String>, response: Response<String>)  {
-
                     idCheck = "${response.body()}"
                     Log.d("ID Check return", "return ID $idCheck")
                     isCheck = idCheck == "사용가능"
