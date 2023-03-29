@@ -15,4 +15,9 @@ class PreferenceUtil (context: Context){
         prefs.edit().putString(key,str).apply()
 
     }
+    fun removePrefs(key : String){
+        val editor = prefs.edit()
+        editor.remove(key)
+        editor.apply()
+    }
 }

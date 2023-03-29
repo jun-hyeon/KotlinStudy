@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.logintest.GlideApp
 import com.bignerdranch.logintest.R
 
-class WriteFeedAdapter(private val imageList : ArrayList<Uri>,val context: Context) : RecyclerView.Adapter<WriteFeedAdapter.ViewHolder>() {
+class WriteFeedAdapter(private val imageList : ArrayList<Uri>) : RecyclerView.Adapter<WriteFeedAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.write_feed_item, parent, false)
@@ -18,7 +18,7 @@ class WriteFeedAdapter(private val imageList : ArrayList<Uri>,val context: Conte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(context, imageList[position])
+        holder.bind(imageList[position])
     }
 
     override fun getItemCount(): Int {
@@ -29,9 +29,9 @@ class WriteFeedAdapter(private val imageList : ArrayList<Uri>,val context: Conte
 
          var imageView : ImageView = itemView.findViewById(R.id.writeFeedItemImage)
 
-        fun bind(mContext: Context, uri: Uri){
+        fun bind(uri: Uri){
 
-            GlideApp.with(mContext).load(uri).fitCenter().into(imageView)
+            GlideApp.with(itemView.context).load(uri).fitCenter().into(imageView)
         }
     }
 }

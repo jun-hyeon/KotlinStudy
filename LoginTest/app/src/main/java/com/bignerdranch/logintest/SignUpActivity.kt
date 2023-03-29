@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.bignerdranch.logintest.repository.FeedRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +19,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var signUpName : EditText
     private lateinit var signUpAccessBtn : Button
     private lateinit var idCheckBtn : TextView
-    private val api = API.create()
+//    private val api = API.create()
     private var isCheck = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,23 +36,27 @@ class SignUpActivity : AppCompatActivity() {
 
         idCheckBtn.setOnClickListener {
 
-            var idCheck = ""
-            api.getRepetitionCheckId(signUpId.text.toString()).enqueue(object : Callback<String>{
 
-                override fun onResponse(call: Call<String>, response: Response<String>)  {
-                    idCheck = "${response.body()}"
-                    Log.d("ID Check return", "return ID $idCheck")
-                    isCheck = idCheck == "사용가능"
-                    Log.d("isCheck",isCheck.toString())
-
-                }
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    Log.d("ID check fail", t.message.toString())
-                    Log.d("ID check fail", "fail")
-                    isCheck = false
-                }
-
-            })
+//            api.getRepetitionCheckId(signUpId.text.toString()).enqueue(object : Callback<String>{
+//
+//                override fun onResponse(call: Call<String>, response: Response<String>)  {
+//                    idCheck = "${response.body()}"
+//                    Log.d("ID Check return", "return ID $idCheck")
+//                    isCheck = idCheck == "사용가능"
+//                    Log.d("isCheck",isCheck.toString())
+//
+//                }
+//                override fun onFailure(call: Call<String>, t: Throwable) {
+//                    Log.d("ID check fail", t.message.toString())
+//                    Log.d("ID check fail", "fail")
+//                    isCheck = false
+//                }
+//
+//            })
+            val idCeckResult  = FeedRepository().idCheck(signUpId.text.toString())
+            if (idCeckResult.value == "사용가능"){
+                isCheck = true
+            }
         }
 
         signUpAccessBtn.setOnClickListener {
@@ -68,30 +73,30 @@ class SignUpActivity : AppCompatActivity() {
 
 
                 Log.d("log",userInfo.toString())
-
-                api.postUser(userInfo).enqueue(object : Callback<String>{
-                    override fun onResponse(
-                        call: Call<String>,
-                        response: Response<String>
-                    ) {
-                        if (!response.isSuccessful){
-                            Log.d("log", "Code ${response.code()}")
-                            Log.d("log", response.body().toString())
-
-                        }else{
-
-                            Log.d("log", response.toString())
-                            Log.d("log", response.body().toString())
-                            if(response.body().toString().isNotEmpty())
-                                Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_SHORT).show()
-                        }
-                        finish()
-                    }
-                    override fun onFailure(call: Call<String>, t: Throwable) {
-                        Log.d("log", t.message.toString())
-                        Log.d("log","fail")
-                    }
-                })
+//
+//                api.postUser(userInfo).enqueue(object : Callback<String>{
+//                    override fun onResponse(
+//                        call: Call<String>,
+//                        response: Response<String>
+//                    ) {
+//                        if (!response.isSuccessful){
+//                            Log.d("log", "Code ${response.code()}")
+//                            Log.d("log", response.body().toString())
+//
+//                        }else{
+//
+//                            Log.d("log", response.toString())
+//                            Log.d("log", response.body().toString())
+//                            if(response.body().toString().isNotEmpty())
+//                                Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_SHORT).show()
+//                        }
+//                        finish()
+//                    }
+//                    override fun onFailure(call: Call<String>, t: Throwable) {
+//                        Log.d("log", t.message.toString())
+//                        Log.d("log","fail")
+//                    }
+//                })
             }
         }
 

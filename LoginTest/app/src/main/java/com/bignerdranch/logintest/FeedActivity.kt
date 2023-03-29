@@ -7,110 +7,105 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.View.OnClickListener
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.logintest.adapter.FeedAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.core.view.get
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.bignerdranch.logintest.adapter.MainViewPagerAdapter
+import com.bignerdranch.logintest.databinding.ActivityFeedBinding
 import java.util.*
 
-const val feedActivity = "FeedActivity"
+const val TAG = "FeedActivity"
 
 
 class FeedActivity : AppCompatActivity() {
 
     private val PERMISSION_ALBUM = 101
     private val REQUEST_STORAGE = 1000
+    private var pressTime : Long = 0
 
     private val permissions : Array<String> = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA)
 
-    private val api : API = API.create()
-    private lateinit var recyclerView : RecyclerView
-    private lateinit var feedAdapter : FeedAdapter
-    private lateinit var newFeed : TextView
-    private lateinit var layoutManager: LinearLayoutManager
+    //private val api : API = API.create()
 
+
+
+    private lateinit var binding:ActivityFeedBinding
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_feed)
-
-        newFeed = findViewById(R.id.newFeed)
-        newFeed.setOnClickListener {
-            //퍼미션 체크
-            val permissionCheck = ContextCompat.checkSelfPermission(this,permissions.toString())
-            requestPermissions(permissions,REQUEST_STORAGE)
-
-//            if (permissionCheck == PackageManager.PERMISSION_GRANTED){
-//                val intent = Intent(this,FeedWriteActivity::class.java)
-//                startActivity(intent)
-//            }else
-
-        }
-
-
-        getFeed()
+        binding = ActivityFeedBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
 
 
-    }
 
-    override fun onRestart() {
-        super.onRestart()
-        getFeed()
+        binding.mainViewPager.adapter = MainViewPagerAdapter(this)
+        binding.mainViewPager.offscreenPageLimit = 1
+        binding.mainViewPager.currentItem = 0
 
-    }
+//        binding.write.setOnClickListener {
+//            //퍼미션 체크
+//            val permissionCheck = ContextCompat.checkSelfPermission(this,permissions.toString())
+//            requestPermissions(permissions,REQUEST_STORAGE)
+//
+////            if (permissionCheck == PackageManager.PERMISSION_GRANTED){
+////                val intent = Intent(this,FeedWriteActivity::class.java)
+////                startActivity(intent)
+////            }else
+//
+//        }
 
-    private fun getFeed(){
-        //피드 조회
-        api.getFeed().enqueue(object : Callback<List<FeedQueryItem>>{
-            override fun onResponse(
-                call: Call<List<FeedQueryItem>>,
-                response: Response<List<FeedQueryItem>>
-            ) {
-                Log.d(feedActivity, "연결성공 ${response.code()}")
-
-                if (response.isSuccessful){
-                    Log.d(feedActivity,"${response.body()}")
-
-                    getList(response.body()!!)
-
-
-                    Log.d("size","${response.body()}")
-
-                }else{
-                    Log.d(feedActivity, "불완전 ${response.code()}")
+        binding.mainViewPager.registerOnPageChangeCallback(object : OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when(position){
+                    0 -> binding.bottomNavigation.menu.getItem(0).isChecked = true
+                    1 -> binding.bottomNavigation.menu.getItem(2).isChecked = true
                 }
             }
+        })
 
-            override fun onFailure(call: Call<List<FeedQueryItem>>, t: Throwable) {
-                Log.d(feedActivity, "연결실패 ${t.message}")
+        binding.bottomNavigation.setOnItemSelectedListener {
+                when(it){
+                    binding.bottomNavigation.menu.getItem(0) -> {
+                        binding.mainViewPager.currentItem = 0
+                        true
+                    }
+                    binding.bottomNavigation.menu.getItem(1) -> {
+                        val intent = Intent(this@FeedActivity,FeedWriteActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+
+                    binding.bottomNavigation.menu.getItem(2) -> {
+                        binding.mainViewPager.currentItem = 1
+                        true
+                    }
+
+                    else -> false
+                }
+
             }
 
-        })
-    }
 
-    //리사이클러뷰 어댑터연결
-   private fun getList(feedItems : List<FeedQueryItem>){
 
-        recyclerView = findViewById(R.id.feedRecyclerView)
-        feedAdapter = FeedAdapter((feedItems),this)
-        recyclerView.adapter = feedAdapter
-        layoutManager = LinearLayoutManager(this)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
-        recyclerView.layoutManager = layoutManager
+
+
 
 
     }
+
+
 
     //퍼미션 확인 메서드
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -142,6 +137,7 @@ class FeedActivity : AppCompatActivity() {
     }
 
 
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showDialog(){
         AlertDialog.Builder(this)
@@ -159,5 +155,17 @@ class FeedActivity : AppCompatActivity() {
             .create()
             .show()
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if(System.currentTimeMillis() - pressTime < 2500){
+            super.getOnBackPressedDispatcher().onBackPressed()
+            return
+        }
+        Toast.makeText(this,"한번 더 클릭 시 홈으로 이동됩니다.",Toast.LENGTH_SHORT).show()
+        pressTime = System.currentTimeMillis()
+    }
+
+
 
 }

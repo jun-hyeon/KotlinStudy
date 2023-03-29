@@ -13,7 +13,7 @@ import com.bignerdranch.logintest.FeedQueryItem
 import com.bignerdranch.logintest.Ff
 import com.bignerdranch.logintest.R
 
-class FeedAdapter(private val feedItems: List<FeedQueryItem>, private val context: Context) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>()  {
+class FeedAdapter(private val feedItems: List<FeedQueryItem>) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>()  {
 
 
 
@@ -23,7 +23,7 @@ class FeedAdapter(private val feedItems: List<FeedQueryItem>, private val contex
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-      holder.bind(feedItems[position], context)
+      holder.bind(feedItems[position])
 
     }
 
@@ -32,6 +32,8 @@ class FeedAdapter(private val feedItems: List<FeedQueryItem>, private val contex
         return feedItems.size
     }
 
+
+
      class FeedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
          private var ffItem = listOf<Ff>()
          private val feedProfileImg : ImageView = itemView.findViewById(R.id.feedProfileImg)
@@ -39,14 +41,14 @@ class FeedAdapter(private val feedItems: List<FeedQueryItem>, private val contex
          private val feedViewPager : ViewPager2 = itemView.findViewById(R.id.feedViewPager)
          private val feedContent: TextView = itemView.findViewById(R.id.feedContent)
 
-         fun bind(feedQueryItem: FeedQueryItem, context: Context){
+         fun bind(feedQueryItem: FeedQueryItem){
              feedNickName.text = feedQueryItem.memberId
              feedContent.text = feedQueryItem.feedContent
              ffItem = feedQueryItem.ffList!!
 
 
              feedViewPager.offscreenPageLimit = 1
-             feedViewPager.adapter = FeedViewPagerAdapter(ffItem, context)
+             feedViewPager.adapter = FeedViewPagerAdapter(ffItem)
 
              Log.d("RecyclerViewAdapter", ffItem.toString())
 

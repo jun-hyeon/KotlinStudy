@@ -34,8 +34,6 @@ data class LoginInfo(
     )
 
 
-
-
 data class FeedQueryItem(
     val feedContent: String?,
     val feedDate: String,

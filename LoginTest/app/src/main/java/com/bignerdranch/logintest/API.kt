@@ -34,18 +34,5 @@ interface API {
     @Part  uploadImage : List<MultipartBody.Part>
   ) :Call<String>
 
-  companion object{
 
-    private const val baseUrl = "http://172.30.1.36:8080/"
-
-    fun create() : API {
-      val gson : Gson = GsonBuilder().setLenient().create()
-      return  Retrofit.Builder()
-        .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .baseUrl(baseUrl)
-        .build()
-        .create(API::class.java)
-    }
-  }
 }

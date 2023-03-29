@@ -1,35 +1,25 @@
 package com.bignerdranch.logintest
 
-import android.content.ContentUris
-import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.viewpager2.widget.ViewPager2
 import com.bignerdranch.logintest.adapter.WriteFeedAdapter
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.http.Multipart
+import com.bignerdranch.logintest.repository.FeedRepository
+
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,10 +36,10 @@ class FeedWriteActivity : AppCompatActivity() {
     private lateinit var writeFeedAdapter : WriteFeedAdapter
     private lateinit var getImages : ActivityResultLauncher<Intent>
     private lateinit var file : File
-    private val imageList = arrayListOf<Uri>()
-    private val imagePathList = arrayListOf<File>()
 
-    private val  api : API = API.create()
+    private var imagePathList = arrayListOf<File>()
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,9 +90,18 @@ class FeedWriteActivity : AppCompatActivity() {
         }
 
         send.setOnClickListener {
-            window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            writeSend(contentText,getDate(),imagePathList,App.prefs.getString("memberId","no Id"))
+          //  window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+          //  writeSend(contentText,getDate(),imagePathList,App.prefs.getString("memberId","no Id"))
+              val result = FeedRepository().writeSend(contentText,feedDate,imagePathList,memberId)
 
+                Toast.makeText(this,"now loading...", Toast.LENGTH_SHORT).show()
+            result.observe(this, androidx.lifecycle.Observer { result ->
+                if (result == "ok"){
+                    finish()
+                }else{
+                    Toast.makeText(this,"Upload Fail!!!", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
 
@@ -112,8 +111,8 @@ class FeedWriteActivity : AppCompatActivity() {
             if (it.resultCode == RESULT_OK){
                 val clipData = it.data?.clipData
                 val clipDataSize = clipData?.itemCount
-
-
+                val imageList = arrayListOf<Uri>()
+                imagePathList = arrayListOf()
                 //사진이 1장일때
                 if(clipData == null){
 
@@ -130,20 +129,26 @@ class FeedWriteActivity : AppCompatActivity() {
 
                     //사진이 1장 이상
                     clipData.let {
-                        for(i in 0 until clipDataSize!!){
-                            val selectedImageUri = clipData.getItemAt(i)
+                        if (clipDataSize != null) {
+                            if (clipDataSize < 5){
 
-                            imageList.add(selectedImageUri.uri)
-                            Log.d("clipData",imageList[i].toString())
-                            file = File(App.realPath.getRealPathFromURI(this,selectedImageUri.uri)!!)
-                            imagePathList.add(file)
-                            Log.d("clipFile","${imagePathList[i]}")
+                                for(i in 0 until clipDataSize!!){
+                                    val selectedImageUri = clipData.getItemAt(i)
+
+                                    imageList.add(selectedImageUri.uri)
+                                    Log.d("clipData",imageList[i].toString())
+                                    file = File(App.realPath.getRealPathFromURI(this,selectedImageUri.uri)!!)
+                                    imagePathList.add(file)
+                                    Log.d("clipFile","${imagePathList[i]}")
+                                }
+                            }else{
+                                Toast.makeText(this,"5장 이하로 선택해주세요!!",Toast.LENGTH_SHORT).show()
+                            }
                         }
 
                     }
                 }
                 getImageList(imageList) //뷰페이저로 사진 보여주기
-
             }
         }
     }
@@ -151,7 +156,7 @@ class FeedWriteActivity : AppCompatActivity() {
     //뷰페이저 어댑터
     private fun getImageList(imageList: ArrayList<Uri>){
         images = findViewById(R.id.writeFeedImageView)
-        writeFeedAdapter = WriteFeedAdapter(imageList, this)
+        writeFeedAdapter = WriteFeedAdapter(imageList)
         images.offscreenPageLimit = 1
         images.adapter = writeFeedAdapter
     }
@@ -163,35 +168,5 @@ class FeedWriteActivity : AppCompatActivity() {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return simpleDateFormat.format(date).toString()
     }
-
-
-
-    private fun writeSend(content : String?, date : String,  imageFileList : ArrayList<File>, memberId : String){
-        val files = arrayListOf<MultipartBody.Part>()
-        for(i in 0 until imageFileList.size){
-            val requestFile = RequestBody.create(MediaType.parse("image/*"),imageFileList[i])
-            val filePart = MultipartBody.Part.createFormData("uploadImage",file.name,requestFile)
-
-            files.add(filePart)
-        }
-
-
-        val feedQueryItem = FeedQueryItem(content, date,null,null, memberId)
-
-        api.writeFeed(feedQueryItem,files).enqueue(object : Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-
-                Log.d("write OK", "${response.body()}, ${response.code()}")
-                finish()
-            }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d("write fail", "$t")
-                finish()
-            }
-
-        })
-    }
-
 
 }

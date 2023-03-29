@@ -8,9 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.bignerdranch.logintest.repository.FeedRepository
+
 
 class LoginActivity : AppCompatActivity() {
    lateinit var loginBtn : Button
@@ -19,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
    lateinit var siginUpBtn : TextView
    lateinit var findPw : TextView
 
-   private val api  = API.create()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +30,15 @@ class LoginActivity : AppCompatActivity() {
         siginUpBtn = findViewById(R.id.signUpBtn)
         findPw = findViewById(R.id.pwFindBtn)
 
-        val memberId = App.prefs.getString("memberId","mo memberId")
+        val memberId = App.prefs.getString("memberId","no memberId")
+        val memberPw = App.prefs.getString("memberPw", "no memberPw")
+        Log.d("PREFS","ID: $memberId, PW: $memberPw")
 
-        Log.d("PREFS",memberId)
+        if (memberId != "no memberId" && memberPw != "no memberPw"){
+            val intent = Intent(applicationContext,FeedActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         siginUpBtn.setOnClickListener {
             val intent = Intent(this,SignUpActivity::class.java)
@@ -44,35 +49,20 @@ class LoginActivity : AppCompatActivity() {
             if (loginId.text.isEmpty() && loginPw.text.isEmpty()){
                 Toast.makeText(this,"ID와 PW를 입력해주세요", Toast.LENGTH_SHORT).show()
             }else{
+
                 val loginRequest  = LoginRequest(loginId.text.toString(), loginPw.text.toString())
-                api.loginMember(loginRequest).enqueue(object : Callback<LoginInfo>{
-                    override fun onResponse(call: Call<LoginInfo>, response: Response<LoginInfo>) {
+                val loginInfoLiveData = FeedRepository().loginRequest(loginRequest)
 
+                if(loginInfoLiveData.value!!.memberState == "로그인 완료"){
 
-                            Log.d("Login Request success", response.code().toString())
-                            Log.d("Login Request success", response.body().toString())
-//                            val loginInfo = response.body()?.let {
-//                                    it -> LoginInfo( it.memberId, it.memberState, it.memberName) }
-                        val loginInfo = response.body()
+                    App.prefs.setString("memberId", loginRequest.memberId)
+                    App.prefs.setString("memberPw", loginRequest.memberPwd)
 
-                        if (loginInfo != null) {
-                            Toast.makeText(applicationContext, loginInfo.memberState,Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, FeedActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
 
-                            if (loginInfo.memberState == "로그인 완료") {
-                                App.prefs.setString("memberId",loginInfo.memberId)
-
-
-                                val intent = Intent(applicationContext,FeedActivity::class.java)
-                                startActivity(intent)
-                            }
-                        }
-                    }
-                    override fun onFailure(call: Call<LoginInfo>, t: Throwable) {
-                        Log.d("Login Request fail", t.message.toString())
-                        Log.d("Login Request fail", "fail")
-                    }
-
-                })
             }
         }
 
