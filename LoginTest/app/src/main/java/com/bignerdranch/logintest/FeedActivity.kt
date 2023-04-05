@@ -9,10 +9,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View.OnClickListener
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bignerdranch.logintest.adapter.MainViewPagerAdapter
@@ -30,6 +37,8 @@ class FeedActivity : AppCompatActivity() {
 
     private val permissions : Array<String> = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA)
 
+
+
     //private val api : API = API.create()
 
 
@@ -46,21 +55,19 @@ class FeedActivity : AppCompatActivity() {
 
 
 
+
         binding.mainViewPager.adapter = MainViewPagerAdapter(this)
         binding.mainViewPager.offscreenPageLimit = 1
         binding.mainViewPager.currentItem = 0
+        binding.mainViewPager.isUserInputEnabled = false
 
-//        binding.write.setOnClickListener {
-//            //퍼미션 체크
-//            val permissionCheck = ContextCompat.checkSelfPermission(this,permissions.toString())
-//            requestPermissions(permissions,REQUEST_STORAGE)
-//
-////            if (permissionCheck == PackageManager.PERMISSION_GRANTED){
-////                val intent = Intent(this,FeedWriteActivity::class.java)
-////                startActivity(intent)
-////            }else
-//
-//        }
+
+//            if (permissionCheck == PackageManager.PERMISSION_GRANTED){
+//                val intent = Intent(this,FeedWriteActivity::class.java)
+//                startActivity(intent)
+//            }else
+
+
 
         binding.mainViewPager.registerOnPageChangeCallback(object : OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
@@ -79,8 +86,9 @@ class FeedActivity : AppCompatActivity() {
                         true
                     }
                     binding.bottomNavigation.menu.getItem(1) -> {
-                        val intent = Intent(this@FeedActivity,FeedWriteActivity::class.java)
-                        startActivity(intent)
+                        //퍼미션 체크
+                        val permissionCheck = ContextCompat.checkSelfPermission(this,permissions.toString())
+                        requestPermissions(permissions,REQUEST_STORAGE)
                         true
                     }
 
@@ -95,14 +103,17 @@ class FeedActivity : AppCompatActivity() {
             }
 
 
+    }
+
+    override fun onRestart() {
+        super.onRestart()
 
 
+        Log.d("ReStart","Activity Restarted!")
 
 
 
     }
-
-
 
     //퍼미션 확인 메서드
 
@@ -165,6 +176,7 @@ class FeedActivity : AppCompatActivity() {
         Toast.makeText(this,"한번 더 클릭 시 홈으로 이동됩니다.",Toast.LENGTH_SHORT).show()
         pressTime = System.currentTimeMillis()
     }
+
 
 
 

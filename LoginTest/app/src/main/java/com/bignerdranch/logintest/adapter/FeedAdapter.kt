@@ -1,21 +1,31 @@
 package com.bignerdranch.logintest.adapter
 
 import android.content.Context
+import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bignerdranch.logintest.FeedQueryItem
 import com.bignerdranch.logintest.Ff
 import com.bignerdranch.logintest.R
 
-class FeedAdapter(private val feedItems: List<FeedQueryItem>) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>()  {
+class FeedAdapter() : ListAdapter<FeedQueryItem,FeedAdapter.FeedViewHolder>(MyDiffCallBack())  {
 
+    interface ItemClickListener{
+        fun onClick(view: View,position: Int)
+    }
 
+    private lateinit var itemClickListener: ItemClickListener
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
@@ -23,14 +33,13 @@ class FeedAdapter(private val feedItems: List<FeedQueryItem>) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-      holder.bind(feedItems[position])
+        val feedQueryItem = getItem(position)
+         holder.bind(feedQueryItem)
+
 
     }
 
 
-    override fun getItemCount(): Int {
-        return feedItems.size
-    }
 
 
 
@@ -40,6 +49,8 @@ class FeedAdapter(private val feedItems: List<FeedQueryItem>) : RecyclerView.Ada
          private val feedNickName: TextView = itemView.findViewById(R.id.feedNickName)
          private val feedViewPager : ViewPager2 = itemView.findViewById(R.id.feedViewPager)
          private val feedContent: TextView = itemView.findViewById(R.id.feedContent)
+         private val feedMore : ImageView  = itemView.findViewById(R.id.feedMore)
+
 
          fun bind(feedQueryItem: FeedQueryItem){
              feedNickName.text = feedQueryItem.memberId
@@ -51,6 +62,7 @@ class FeedAdapter(private val feedItems: List<FeedQueryItem>) : RecyclerView.Ada
              feedViewPager.adapter = FeedViewPagerAdapter(ffItem)
 
              Log.d("RecyclerViewAdapter", ffItem.toString())
+
 
          }
 

@@ -19,20 +19,9 @@ private const val TAG = "FeedRepository"
 
 class FeedRepository {
 
-    private val api : API
-
-    init {
-        val gson : Gson = GsonBuilder().setLenient().create()
-        val retrofit = Retrofit.Builder()
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("http://172.30.1.35:8080/")
-            .build()
-
-        api = retrofit.create(API::class.java)
-    }
+    private val api = RetrofitInstance.getInstance().create(API::class.java)
     //피드 조회
-    suspend fun getFeed(): MutableLiveData<List<FeedQueryItem>>{
+   fun getFeed(): MutableLiveData<List<FeedQueryItem>>{
         val responseLiveData : MutableLiveData<List<FeedQueryItem>> = MutableLiveData()
 
         api.getFeed().enqueue(object : Callback<List<FeedQueryItem>>{
@@ -41,7 +30,8 @@ class FeedRepository {
                 response: Response<List<FeedQueryItem>>
             ) {
                 responseLiveData.value = response.body()
-                Log.d(TAG,"Response received ${responseLiveData.value}")
+                Log.d(TAG,"Response received ${responseLiveData.value} ")
+                Log.d(TAG,"size: ${responseLiveData.value?.size}")
 
             }
 

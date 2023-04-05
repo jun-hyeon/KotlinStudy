@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    tools:context=".FeedActivity">
+    tools:context=".FeedFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:paddingVertical="8dp"
@@ -40,7 +40,8 @@
 
         <ImageView
             android:id="@+id/feedMore"
-            android:layout_marginEnd="10dp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/moreimg"
