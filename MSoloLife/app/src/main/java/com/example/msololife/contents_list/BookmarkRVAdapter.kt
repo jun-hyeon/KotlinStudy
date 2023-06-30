@@ -13,27 +13,27 @@ import com.example.msololife.R
 import com.example.msololife.utils.FBAuth
 import com.example.msololife.utils.FBRef
 
-class BoomarkRVAdapter(private val items: ArrayList<ContentModel>,
-val itemKeyList: ArrayList<String>,
-val bookmarkIdList : MutableList<String>) : RecyclerView.Adapter<ContentRVAdapter.ViewHolder>(){
+class BookmarkRVAdapter(private val items: ArrayList<ContentModel>,
+                                val itemKeyList: ArrayList<String>,
+                                val bookmarkIdList : MutableList<String>) : RecyclerView.Adapter<BookmarkRVAdapter.ViewHolder>(){
 
 //    interface ItemClick{
 //        fun onClick(view: View, position: Int)
 //    }
 //    var itemClick : ItemClick? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentRVAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkRVAdapter.ViewHolder {
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.content_rv_item, parent, false)
 
-        Log.d("ContentRvAdapter",itemKeyList.toString())
-        Log.d("ContentRvAdapter",bookmarkIdList.toString())
+        Log.d("BookmarkRVAdapter",itemKeyList.toString())
+        Log.d("BookmarkRVAdapter",bookmarkIdList.toString())
         return ViewHolder(view)
     }
 
 
 
-    override fun onBindViewHolder(holder: ContentRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookmarkRVAdapter.ViewHolder, position: Int) {
 
 //        if(itemClick != null){
 //            holder.itemView.setOnClickListener{
@@ -72,26 +72,7 @@ val bookmarkIdList : MutableList<String>) : RecyclerView.Adapter<ContentRVAdapte
                 bookmarkArea.setImageResource(R.drawable.bookmark_white)
             }
 
-            bookmarkArea.setOnClickListener {
-                Log.d("ContentRVAdapter", FBAuth.getUid())
 
-                if (bookmarkIdList.contains(key)){
-                    //북마크 있을 때
-                    //bookmarkIdList.remove(key)
-
-                    FBRef.bookmarkRef
-                        .child(FBAuth.getUid())
-                        .child(key)
-                        .removeValue()
-                }else{
-                    //북마크 없을 때
-                    FBRef.bookmarkRef
-                        .child(FBAuth.getUid())
-                        .child(key)
-                        .setValue(BookmarkModel(true))
-                }
-
-            }
 
 
             contentTitle.text = item.title
@@ -100,5 +81,4 @@ val bookmarkIdList : MutableList<String>) : RecyclerView.Adapter<ContentRVAdapte
                 .into(imageViewArea)
         }
     }
-} {
 }
