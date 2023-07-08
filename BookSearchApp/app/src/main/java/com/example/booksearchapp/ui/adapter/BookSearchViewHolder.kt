@@ -20,3 +20,4 @@ class BookSearchViewHolder (private val binding : ItemBookPreviewBinding) : Recy
         }
     }
 }
+

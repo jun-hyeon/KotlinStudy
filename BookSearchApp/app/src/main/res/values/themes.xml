@@ -3,7 +3,32 @@
     <style name="Base.Theme.BookSearchApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/shrine_pink_100</item>-->
+        <item name="colorOnPrimary">@color/shrine_pink_900</item>
+
     </style>
 
-    <style name="Theme.BookSearchApp" parent="Base.Theme.BookSearchApp" />
+    <style name="Theme.BookSearchApp" parent="Base.Theme.BookSearchApp">
+        <item name="bottomNavigationStyle">@style/BottomNavigationView</item>
+
+    </style>
+
+<!--    <style name="Theme.BookSearchApp." parent="Theme.MaterialComponents">-->
+<!--        <item name="bottomNavigationStyle">@style/Custom_BottomNavigationView</item>-->
+<!--    </style>-->
+
+<!--    <style name="Custom_BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">-->
+<!--        <item name="materialThemeOverlay">@style/Custom_BottomNavigationView_Color</item>-->
+<!--    </style>-->
+
+<!--    <style name="Custom_BottomNavigationView_Color" parent="" >-->
+<!--        <item name="colorPrimary">@color/shrine_pink_100</item>-->
+<!--        <item name="colorOnPrimary">@color/shrine_pink_900</item>-->
+<!--    </style>-->
+
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="colorPrimary">@color/shrine_pink_100</item>
+        <item name="colorOnPrimary">@color/shrine_pink_900</item>
+    </style>
+
 </resources>

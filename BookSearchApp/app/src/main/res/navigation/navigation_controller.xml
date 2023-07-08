@@ -8,37 +8,41 @@
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.booksearchapp.ui.view.FavoriteFragment"
-        android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite">
+        android:label="@string/favorite"
+        tools:layout="@layout/fragment_favorite" >
         <action
-            android:id="@+id/action_favoriteFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_favoriteFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_favoriteFragment_to_bookFragment"
+            app:destination="@id/bookFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.booksearchapp.ui.view.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings">
-        <action
-            android:id="@+id/action_settingsFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
-    </fragment>
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.booksearchapp.ui.view.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search">
+        android:label="@string/Search"
+        tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_searchFragment_to_bookFragment"
+            app:destination="@id/bookFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.example.booksearchapp.ui.view.BookFragment"
+        android:label="@string/book_info"
+        tools:layout="@layout/fragment_book" >
+        <argument
+            android:name="book"
+            app:argType="com.example.booksearchapp.data.model.Book" />
     </fragment>
 </navigation>
