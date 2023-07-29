@@ -2,12 +2,16 @@ package com.example.booksearchapp.data.model
 
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+@Entity(tableName = "books")
 data class Book(
     @Json(name = "authors")
     val authors: List<String>,
@@ -15,12 +19,14 @@ data class Book(
     val contents: String,
     @Json(name = "datetime")
     val datetime: String,
+    @PrimaryKey(autoGenerate = false)
     @Json(name = "isbn")
     val isbn: String,
     @Json(name = "price")
     val price: Int,
     @Json(name = "publisher")
     val publisher: String,
+    @ColumnInfo(name = "sale_price")
     @Json(name = "sale_price")
     val salePrice: Int,
     @Json(name = "status")

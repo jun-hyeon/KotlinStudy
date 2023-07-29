@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(text = viewModel.data.value, fontSize = 30.sp)
-                        Button(onClick = {
+                        Button( onClick = {
                             viewModel.changeValue("WOW so GOOOD!")
                         }) {
                             Text(text = viewModel.data.value)
