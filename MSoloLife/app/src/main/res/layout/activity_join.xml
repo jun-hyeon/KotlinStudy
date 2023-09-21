@@ -38,6 +38,7 @@
                 android:id="@+id/emailArea"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:maxLines="1"
                 style="@style/AuthEditText"
                 android:hint="email"
                 />
@@ -53,6 +54,7 @@
                 android:id="@+id/passwordArea1"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:maxLines="1"
                 style="@style/AuthEditText"
                 android:inputType="textPassword"
                 android:hint="password"
@@ -69,6 +71,7 @@
                 android:id="@+id/passwordArea2"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:maxLines="1"
                 style="@style/AuthEditText"
                 android:inputType="textPassword"
                 android:hint="password check"

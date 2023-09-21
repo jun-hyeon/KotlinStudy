@@ -11,6 +11,7 @@ class BookSearchPagingSource(
     private val api : BookSearchApi,
     private val query : String,
     private val sort : String,) : PagingSource<Int, Book>(){
+
     override fun getRefreshKey(state: PagingState<Int, Book>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)

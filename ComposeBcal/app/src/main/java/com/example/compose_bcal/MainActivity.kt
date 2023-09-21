@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -127,8 +129,9 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
-            Spacer(modifier = Modifier
-                .height(8.dp)
+            Spacer(
+                modifier = Modifier
+                    .height(8.dp)
                 )
             Button(
                 onClick = {
@@ -173,9 +176,11 @@ fun ResultScreen(navController: NavController, bmi: Double){
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "home",
-                        modifier = Modifier.clickable {
-                            navController.popBackStack()
-                        }
+                        modifier = Modifier
+                            .clickable {
+                                navController.popBackStack()
+                            }
+
                     )
                 }
             )
@@ -203,9 +208,7 @@ class BmiViewModel : ViewModel(){
     private val _bmi = mutableStateOf(0.0)
     val bmi : State<Double> = _bmi
 
-    fun bmiCalculate(
-        height: Double, weight: Double,
-    ){
+    fun bmiCalculate(height: Double, weight: Double){
         _bmi.value = weight/(height / 100.0).pow(2.0)
     }
 }

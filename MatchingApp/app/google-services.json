@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "393331986062",
+    "project_id": "machingapp-42859",
+    "storage_bucket": "machingapp-42859.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393331986062:android:251265036d8b799b92c3df",
+        "android_client_info": {
+          "package_name": "com.example.matchingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393331986062-obc2tmcso489aiq99pvsdrvr2qe623p0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8x4PltY4OLG4L_9XDIUMW33JrGvI_Xjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393331986062-obc2tmcso489aiq99pvsdrvr2qe623p0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
